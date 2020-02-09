@@ -1,33 +1,44 @@
-const https = require("https");
+const { OAuth2 } = require("oauth");
 const keys = require("../config/keys");
-const token = require("../config/token");
 
-//needs logic for token refresh ?
-const authorize = async () => {
-  if (token.bearer_token && token.bearer_token.length > 0)
-    return token.bearer_token;
+let authObj = {};
 
-  const credentials = `${keys.consumer_key}:${keys.consumer_secret}`;
-  const options = {
-    hostname: "api.twitter.com",
-    port: 443,
-    path: "/oauth2/token",
-    method: "POST",
-    headers: {
-      Autorization: `Basic ${new Buffer(credentials).toString("base64")}`,
-      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-    },
-    body: "grant_type=client_credentials"
+const getBearerToken = () =>
+  new Promise((resolve, reject) =>
+    new OAuth2(
+      keys.consumer_key,
+      keys.consumer_secret,
+      "https://api.twitter.com/",
+      null,
+      "oauth2/token",
+      null
+    ).getOAuthAccessToken(
+      "",
+      { grant_type: "client_credentials" },
+      (e, access_token, refresh_token, results) => {
+        e && reject(e);
+        access_token && resolve(access_token);
+      }
+    )
+  );
+
+const getAuthorized = async () => {
+  if (authObj.bearer_token) return authObj;
+
+  const response = await getBearerToken();
+
+  if (response.error) throw new Error(e);
+
+  authObj = {
+    ...authObj,
+    consumer_key: keys.consumer_key,
+    consumer_secret: keys.consumer_secret,
+    bearer_token: response
   };
 
-  try {
-    const response = await https.request(options);
-    token.bearer_token = response.access_token;
-  } catch (err) {
-    throw err;
-  }
+  return authObj;
 };
 
 module.exports = {
-  authorize: authorize
+  getAuthorized
 };

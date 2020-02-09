@@ -1,24 +1,22 @@
-import _ from "lodash";
-import { client } from "../services/twitter";
+//const _ = require("lodash");
+const { EventEmitter } = require("events");
+const TwitterClient = require("../services/twitter");
+
+const Stream = new EventEmitter();
 
 module.exports = app => {
-  app.post("/", async (req, res) => {
-    const { filter } = req.body;
+  app.get("/statuses", async (req, res) => {
+    res.writeHead(200, {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      "Content-Encoding": "none"
+    });
 
-    try {
-      const stream = client.stream("statuses/filter", {
-        track: `${filter && filter.length > 0 ? filter : "javascript"}`
-      });
-      stream.on("data", function(event) {
-        console.log(event && event.text);
-      });
-
-      stream.on("error", function(error) {
-        throw error;
-      });
-    } catch (err) {
-      console.log("Streams Error, ", err);
-      res.status(500).send("Streams error");
-    }
+    const client = TwitterClient();
+    const emitter = Stream.on("push", ({ id, text }) => {
+      res.write(`id: ${id}\ndata: ${text}\n\n`);
+    });
+    //client.stream(req, res);
+    client.stream(emitter);
   });
 };

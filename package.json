@@ -4,15 +4,15 @@
   "description": "A twitter streams API consumer",
   "main": "index.js",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/zotijs/consume-twitter.git"
+    "type": "git",
+    "url": "https://github.com/zotijs/consume-twitter.git"
   },
   "scripts": {
     "start": "node index.js",
     "test": "test index.js",
     "server": "nodemon index.js",
     "client": "npm run start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run webhook\"",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "zotijs",
@@ -23,7 +23,7 @@
     "express": "^4.17.1",
     "jest": "^24.9.0",
     "lodash": "^4.17.15",
-    "nodemon": "^1.19.3",
-    "twitter": "^1.7.1"
+    "nodemon": "^1.19.4",
+    "oauth": "^0.9.15"
   }
 }

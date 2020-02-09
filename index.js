@@ -1,7 +1,5 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const keys = require("./config/keys");
-const authorization = require("./services/authorization");
 
 const app = express();
 
@@ -9,10 +7,7 @@ const app = express();
 app.use(bodyParser.json());
 //<middlewares
 
-//get bearer token from twitter api
-authorization.authorize();
-
-//require("./routes/authRoutes")(app);
+require("./routes/twitterRoutes")(app);
 
 if (process.env.NODE_ENV === "production") {
   //express will serve production assets like

@@ -1,0 +1,17 @@
+body {
+    background-color: #000;
+}
+
+.twitsContainer {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    justify-content: start;
+    align-content: flex-start;
+    margin: 5vh 10vw 5vh 10vw;
+}
+
+.twit {
+    color: #ebebeb;
+    font-weight: 600;
+    font-size: large;
+}
