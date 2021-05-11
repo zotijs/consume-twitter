@@ -22,7 +22,7 @@
     "concurrently": "^4.1.2",
     "express": "^4.17.1",
     "jest": "^24.9.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "nodemon": "^1.19.4",
     "oauth": "^0.9.15"
   }
